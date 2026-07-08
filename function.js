@@ -14,7 +14,15 @@ const mul = (a, b)=>{
 }
 
 // export.module = {add, sub, mul}  for commonjs 
-export { add, sub, mul };
 
 
+class Person{
+    constructor(name){
+        this.name=name;
+    }
+    greet(){
+        console.log(`Hello ${this.name}`);
+    }
+}
 
+export { add, sub, mul, Person };

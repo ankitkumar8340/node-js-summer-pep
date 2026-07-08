@@ -1,6 +1,5 @@
 import {createServer} from 'node:http';
-import {add, sub, mul} from './function.js'
-
+import {add, sub, mul, Person} from './function.js'
 
 const server = createServer((req, res)=>{
     res.writeHead(200, {'Content-Type': 'text/plain'})
@@ -12,5 +11,8 @@ server.listen(3000, '127.0.0.1' ,()=> {console.log("server is running")});
 const result = add(2,3);
 console.log(result)
 
+
+const p1 = new Person("Ankit");
+p1.greet();
 
 
