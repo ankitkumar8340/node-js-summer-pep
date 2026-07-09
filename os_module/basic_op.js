@@ -15,7 +15,8 @@ console.log("Free memory: ", os.freemem()/1024/1024/1024); //memory currently fr
 
 console.log("CPU cores: ", os.cpus().length); //cpu specification
 
-
+console.log("User Info: ", os.userInfo()); //information about user
+console.log("Network Interface: ", os.networkInterfaces()); //information about network interface
 
 
 
