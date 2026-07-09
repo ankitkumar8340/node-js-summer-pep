@@ -29,6 +29,12 @@ rmdir('public', (error)=>{
     }
 })
 
+rm('public', {recursive: true, force:true});
+// recursive: true --> remove folder contents too
+ //force: true --> avoids errors if the path does not exist
+
+ rename()
+
 
 
 
