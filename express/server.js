@@ -25,7 +25,9 @@ app.delete('/', (req, res)=>{
     res.send("Hello from Delete");
 });
 
-
+app.listen(PORT, ()=>{
+    console.log("Server is running")
+})
 
 
 
