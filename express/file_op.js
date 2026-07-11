@@ -85,3 +85,28 @@ app.get("/file/:filename", (req, res) => {
     res.sendFile(filePath);
 
 });
+
+
+// =======================
+// Update File
+// PUT /update/:filename
+// =======================
+
+app.put("/update/:filename", upload.single("file"), (req, res) => {
+
+    const oldFile = path.join(__dirname, "uploads", req.params.filename);
+
+    if (!fs.existsSync(oldFile)) {
+        return res.status(404).json({
+            message: "Old file not found"
+        });
+    }
+
+    fs.unlinkSync(oldFile);
+
+    res.json({
+        message: "File updated successfully",
+        newFile: req.file.filename
+    });
+
+});
