@@ -110,3 +110,40 @@ app.put("/update/:filename", upload.single("file"), (req, res) => {
     });
 
 });
+
+
+// =======================
+// Delete File
+// DELETE /delete/:filename
+// =======================
+
+app.delete("/delete/:filename", (req, res) => {
+
+    const filePath = path.join(__dirname, "uploads", req.params.filename);
+
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            message: "File not found"
+        });
+    }
+
+    fs.unlink(filePath, (err) => {
+
+        if (err) {
+            return res.status(500).json({
+                error: err.message
+            });
+        }
+
+        res.json({
+            message: "File deleted successfully"
+        });
+
+    });
+
+});
+
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
