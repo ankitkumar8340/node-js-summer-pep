@@ -44,3 +44,44 @@ app.post("/upload", upload.single("file"), (req, res) => {
     });
 });
 
+
+// =======================
+// Read All Files
+// GET /files
+// =======================
+
+app.get("/files", (req, res) => {
+
+    fs.readdir("uploads", (err, files) => {
+
+        if (err) {
+            return res.status(500).json({
+                error: err.message
+            });
+        }
+
+        res.json(files);
+
+    });
+
+});
+
+
+// =======================
+// Read Single File
+// GET /file/:filename
+// =======================
+
+app.get("/file/:filename", (req, res) => {
+
+    const filePath = path.join(__dirname, "uploads", req.params.filename);
+
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            message: "File not found"
+        });
+    }
+
+    res.sendFile(filePath);
+
+});
