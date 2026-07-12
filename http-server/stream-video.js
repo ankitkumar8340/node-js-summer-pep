@@ -7,12 +7,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname= dirname(__filename);
 
 const server = createServer(((req, res)=>{
-    if(req.url=='/'){
+    if(req.url==='/'){
         const htmlPath = join(__dirname, 'public', 'index.html');
         createReadStream(htmlPath).pipe(res);
         return;
     }
-    if (req.url === '/video') {
+    if (req.url === '/videos') {
         const videopath = join(__dirname, 'videos', 'video.mp4');
         const stat = statSync(videopath);
         const fileSize= stat.size;
