@@ -17,3 +17,148 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 15%, rgba(200, 255, 77, 0.05), transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(255, 93, 93, 0.05), transparent 40%);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.arena {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Scoreboard */
+.scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 28px;
+}
+
+.score-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 64px;
+}
+
+.score-label {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.score-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+}
+
+.round-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-display);
+}
+
+.round-label span:first-child {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+}
+
+.round-label span:last-child {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Duel stage */
+.duel-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.fighter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.hand {
+  font-size: 72px;
+  line-height: 1;
+  transition: transform 0.35s cubic-bezier(.2,.9,.3,1.3);
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.35));
+}
+
+.fighter--player .hand { transform-origin: right center; }
+.fighter--cpu .hand { transform-origin: left center; transform: scaleX(-1); }
+
+.fighter-tag {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.fighter.shake .hand {
+  animation: windup 0.5s ease-in-out;
+}
+
+@keyframes windup {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px) rotate(-8deg); }
+  50% { transform: translateX(6px) rotate(6deg); }
+  75% { transform: translateX(-4px) rotate(-4deg); }
+}
+
+.fighter--cpu.shake .hand {
+  animation: windup-cpu 0.5s ease-in-out;
+}
+
+@keyframes windup-cpu {
+  0%, 100% { transform: scaleX(-1) translateX(0); }
+  25% { transform: scaleX(-1) translateX(-8px) rotate(-8deg); }
+  50% { transform: scaleX(-1) translateX(6px) rotate(6deg); }
+  75% { transform: scaleX(-1) translateX(-4px) rotate(-4deg); }
+}
+
+.fighter.win .hand {
+  transform: scale(1.25);
+}
+.fighter--cpu.win .hand {
+  transform: scaleX(-1) scale(1.25);
+}
+.fighter.lose .hand {
+  opacity: 0.35;
+  transform: scale(0.85);
+}
+.fighter--cpu.lose .hand {
+  opacity: 0.35;
+  transform: scaleX(-1) scale(0.85);
+}
+
