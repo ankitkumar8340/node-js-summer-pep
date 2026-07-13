@@ -1,0 +1,19 @@
+:root {
+  --bg: #17171b;
+  --bg-raised: #1f1f25;
+  --text: #f2f0eb;
+  --text-dim: #8d8d97;
+  --win: #c8ff4d;
+  --lose: #ff5d5d;
+  --tie: #5da9ff;
+  --line: #2c2c34;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
