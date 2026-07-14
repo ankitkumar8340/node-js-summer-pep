@@ -46,3 +46,28 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Hash password automatically before saving, but only if it changed
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+  next();
+});
+
+// Instance method to compare plaintext password with stored hash
+userSchema.methods.comparePassword = function (plainPassword) {
+  return bcrypt.compare(plainPassword, this.password);
+};
+
+const User = mongoose.model('User', userSchema);
+
+// ---------------------------------------------------------------------------
+// 3. JWT HELPERS
+// ---------------------------------------------------------------------------
+function generateToken(user) {
+  return jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN }
+  );
+}
