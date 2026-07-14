@@ -105,3 +105,80 @@ function authorize(...allowedRoles) {
 // ---------------------------------------------------------------------------
 // 5. ROUTES
 // ---------------------------------------------------------------------------
+
+// --- Register ---
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'name, email, password are required' });
+    }
+
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.status(409).json({ message: 'Email already registered' });
+    }
+
+    // password gets hashed automatically by the pre('save') hook
+    const user = await User.create({ name, email, password });
+
+    const token = generateToken(user);
+    res.status(201).json({
+      message: 'User registered',
+      token,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+// --- Login ---
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: 'email and password are required' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const token = generateToken(user);
+    res.json({
+      message: 'Login successful',
+      token,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+// --- Protected route: get logged-in user's profile ---
+app.get('/api/users/me', protect, async (req, res) => {
+  const user = await User.findById(req.user.id).select('-password');
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  res.json(user);
+});
+
+// --- Protected + role-restricted route: list all users (admin only) ---
+app.get('/api/admin/users', protect, authorize('admin'), async (req, res) => {
+  const users = await User.find().select('-password');
+  res.json(users);
+});
+
+// --- Health check ---
+app.get('/', (req, res) => res.send('Auth pipeline running'));
+
+// ---------------------------------------------------------------------------
+// 6. START SERVER
+// ---------------------------------------------------------------------------
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
